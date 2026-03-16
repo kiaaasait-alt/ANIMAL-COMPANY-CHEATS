@@ -1,0 +1,63 @@
+workflows:
+  android-so-build:
+    name: Build Android .so Library
+    max_build_duration: 60
+    environment:
+      java: 17
+    scripts:
+      - name: Accept licenses and install NDK + CMake
+        script: |
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses 2>/dev/null || true
+          $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager \
+            "platform-tools" \
+            "platforms;android-34" \
+            "ndk;26.1.10909125" \
+            "cmake;3.22.1"
+
+      - name: Make gradlew executable
+        script: |
+          chmod +x $CM_BUILD_DIR/gradlew
+
+      - name: Build .so files (Release)
+        script: |
+          cd $CM_BUILD_DIR
+          ./gradlew app:buildCMakeRelWithDebInfo --stacktrace
+          echo "Exit code: $?"
+
+      - name: Build .so files (Debug)
+        script: |
+          cd $CM_BUILD_DIR
+          ./gradlew app:buildCMakeDebug --stacktrace
+          echo "Exit code: $?"
+
+      - name: Collect and verify .so files
+        script: |
+          echo "===== CONFIRMED OUTPUT PATHS ====="
+          find $CM_BUILD_DIR/app/build/intermediates/cxx -name "*.so" -type f
+
+          echo ""
+          echo "===== COPYING TO so-artifacts ====="
+          mkdir -p $CM_BUILD_DIR/so-artifacts
+          FOUND=0
+          while IFS= read -r file; do
+            rel="${file#$CM_BUILD_DIR/}"
+            dest="$CM_BUILD_DIR/so-artifacts/$rel"
+            mkdir -p "$(dirname "$dest")"
+            cp "$file" "$dest"
+            echo "  Copied: $rel"
+            FOUND=$((FOUND + 1))
+          done < <(find $CM_BUILD_DIR -name "*.so" -type f 2>/dev/null)
+
+          echo ""
+          echo "===== TOTAL .so FILES: $FOUND ====="
+          if [ "$FOUND" -eq 0 ]; then
+            echo "ERROR: No .so files found!"
+            exit 1
+          fi
+
+    artifacts:
+      # Exact path confirmed from build log — CMake outputs here
+      - app/build/intermediates/cxx/RelWithDebInfo/**/obj/**/*.so
+      - app/build/intermediates/cxx/Debug/**/obj/**/*.so
+      # Flat copy fallback
+      - so-artifacts/**/*.so
