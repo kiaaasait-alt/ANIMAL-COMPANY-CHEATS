@@ -1,8 +1,8 @@
-Package: com.vyro.vyclientv1
-Name: VyroClientV1
+Package: com.VRX.VRXCLIENT1
+Name: VRX CLIENT
 Version: 1.0
 Architecture: iphoneos-arm64
-Description: Vyro Client for Animal Company
-Author: Vyro
-Maintainer: Vyro
-Section: Tweaks
+Description: VRX CLIENT for Animal Company
+Author: Kia
+Maintainer: Kia
+Section: idk
