@@ -6,9 +6,9 @@ TARGET_CODESIGN = true
 
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = VyroClientV1
+TWEAK_NAME = VRXCLIENT
 
-VyroClientV1_FILES = modmenu.m
+VyroClientV1_FILES = Menu.m
 VyroClientV1_CFLAGS = -fobjc-arc -Wno-overriding-option -Wno-unused-function
 VyroClientV1_FRAMEWORKS = UIKit CoreGraphics
 
