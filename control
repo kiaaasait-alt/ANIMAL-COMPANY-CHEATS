@@ -1,0 +1,8 @@
+Package: com.vyro.vyclientv1
+Name: VyroClientV1
+Version: 1.0
+Architecture: iphoneos-arm64
+Description: Vyro Client for Animal Company
+Author: Vyro
+Maintainer: Vyro
+Section: Tweaks
