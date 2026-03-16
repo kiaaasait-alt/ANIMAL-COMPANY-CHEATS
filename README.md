@@ -1,2 +1,4 @@
-# ANIMAL-COMPANY-CHEATS
-cheats for animal company on Phone Made by kia
+# YEEPS-IPHONE-MODS
+cheats for Yeeps on Phone Made by kia
+
+note: first dylib
