@@ -1,15 +1,17 @@
-INSTALL_TARGET_PROCESSES = AnimalCompany
-TARGET = iphone:clang:16.5:14.0
-ARCHS = arm64
-SIGN = 0
-TARGET_CODESIGN = true
+cd VRXClient
+cat > Makefile << 'EOF'
+export THEOS=/opt/theos
+export TARGET=iphone:clang:latest:13.0
+export ARCHS=arm64 arm64e
 
 include $(THEOS)/makefiles/common.mk
 
-TWEAK_NAME = VRXCLIENT
+TWEAK_NAME = VRXClient
 
-VyroClientV1_FILES = Menu.m
-VyroClientV1_CFLAGS = -fobjc-arc -Wno-overriding-option -Wno-unused-function
-VyroClientV1_FRAMEWORKS = UIKit CoreGraphics
+VRXClient_FILES = Sources/main.mm Sources/Menu.m
+VRXClient_FRAMEWORKS = Foundation UIKit
+VRXClient_LIBRARIES = substrate
+VRXClient_CFLAGS = -fobjc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
+EOF
